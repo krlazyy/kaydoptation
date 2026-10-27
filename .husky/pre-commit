@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "🔍 Running pre-commit security and quality checks..."
+
+if [ -f "./.tools/gitleaks.exe" ]; then
+  GITLEAKS="./.tools/gitleaks.exe"
+elif [ -f "./.tools/gitleaks" ]; then
+  GITLEAKS="./.tools/gitleaks"
+elif command -v gitleaks >/dev/null 2>&1; then
+  GITLEAKS="gitleaks"
+else
+  echo "❌ Gitleaks was not found. Install it from https://github.com/gitleaks/gitleaks/releases or add it to PATH."
+  exit 1
+fi
+
+echo "🔑 Scanning staged changes for secrets..."
+"$GITLEAKS" git --staged --redact --config .gitleaks.toml
+
+echo "🧹 Running lint-staged..."
+npx lint-staged --concurrent false
+
+echo "✅ Pre-commit checks passed."

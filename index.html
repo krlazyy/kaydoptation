@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F9F6F0" />
+    <title>Kaydoption — Find your new best friend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Kaydoption home"
+        ><span class="brand-mark">k</span
+        ><span>kaydoption<span class="brand-dot">.</span></span></a
+      >
+      <nav class="main-nav" id="main-navigation" aria-label="Main navigation">
+        <a class="active" href="#discover">Find a pet</a
+        ><a href="#how">How it works</a><a href="#stories">Happy tails</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" aria-label="Notifications">♧<i></i></button
+        ><button class="avatar" aria-label="Your account">J</button
+        ><button
+          class="menu-btn"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="main-navigation"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="spark">✳</span> A little love goes a long way
+          </div>
+          <h1>Your new best<br />friend is <em>out there.</em></h1>
+          <p>
+            Good things happen when the right pet finds the right person. Let’s
+            make that happen.
+          </p>
+          <a class="button button-dark" href="#discover"
+            >Meet your match <span>↗</span></a
+          >
+          <div class="hero-proof">
+            <div class="proof-avatars">
+              <span>🐶</span><span>🐱</span><span>🐰</span>
+            </div>
+            <div><b>2,400+</b><small>happy beginnings this year</small></div>
+            <span class="proof-heart">♥</span>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="sun"></div>
+          <div
+            class="hero-img"
+            role="img"
+            aria-label="Cats and dogs sharing happy moments with their families"
+          >
+            <video
+              class="hero-video is-active"
+              muted
+              playsinline
+              preload="auto"
+              poster="/images/kaydoption-hero-poster.jpg"
+              aria-hidden="true"
+            ></video>
+            <video
+              class="hero-video"
+              muted
+              playsinline
+              preload="auto"
+              poster="/images/kaydoption-hero-poster.jpg"
+              aria-hidden="true"
+            ></video>
+          </div>
+          <div class="hero-note note-top">
+            <span class="note-icon">✿</span
+            ><span
+              ><b>Meet your kind of wonderful</b
+              ><small>Pets that fit your life</small></span
+            >
+          </div>
+          <div class="hero-note note-bottom">
+            <span class="tiny-heart">♥</span
+            ><span
+              ><b>Home looks good on you</b
+              ><small>Every adoption starts somewhere</small></span
+            >
+          </div>
+          <div class="scribble">good things<br />grow here <span>↘</span></div>
+        </div>
+      </section>
+      <div id="app"></div>
+      <footer>
+        <a class="brand" href="#top"
+          ><span class="brand-mark">k</span
+          ><span>kaydoption<span class="brand-dot">.</span></span></a
+        ><span>For the love of finding home. © 2026 Kaydoption</span
+        ><a href="#discover">Explore adoptable pets ↑</a>
+      </footer>
+    </main>
+    <script>
+      const heroVideos = [...document.querySelectorAll(".hero-video")];
+      const heroClips = [
+        "/videos/kaydoption-hero.mp4",
+        "/videos/tuxedo-cat.mp4",
+        "/videos/cat-cuddle.mp4",
+        "/videos/dog-family.mp4",
+      ];
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      );
+      let activeVideo = 0;
+      let activeClip = 0;
+      let changingClip = false;
+      const loadHeroClip = (video, clipIndex) => {
+        video.src = heroClips[clipIndex];
+        video.dataset.clipIndex = String(clipIndex);
+        video.load();
+      };
+      const prepareNextClip = () => {
+        const nextClip = (activeClip + 1) % heroClips.length;
+        const nextVideo = heroVideos[1 - activeVideo];
+        if (nextVideo.dataset.clipIndex !== String(nextClip)) {
+          loadHeroClip(nextVideo, nextClip);
+        }
+      };
+      const advanceHeroClip = async () => {
+        if (reducedMotion.matches || changingClip) return;
+        changingClip = true;
+        const nextClip = (activeClip + 1) % heroClips.length;
+        const nextVideoIndex = 1 - activeVideo;
+        const nextVideo = heroVideos[nextVideoIndex];
+        if (nextVideo.dataset.clipIndex !== String(nextClip)) {
+          loadHeroClip(nextVideo, nextClip);
+        }
+        try {
+          await nextVideo.play();
+        } catch {
+          changingClip = false;
+          return;
+        }
+        const previousVideo = heroVideos[activeVideo];
+        previousVideo.classList.remove("is-active");
+        nextVideo.classList.add("is-active");
+        activeVideo = nextVideoIndex;
+        activeClip = nextClip;
+        window.setTimeout(() => {
+          previousVideo.pause();
+          prepareNextClip();
+          changingClip = false;
+        }, 700);
+      };
+      heroVideos.forEach((video) =>
+        video.addEventListener("ended", advanceHeroClip),
+      );
+      loadHeroClip(heroVideos[0], 0);
+      loadHeroClip(heroVideos[1], 1);
+      const syncHeroMotion = () => {
+        if (reducedMotion.matches) {
+          heroVideos.forEach((video) => video.pause());
+        } else {
+          void heroVideos[activeVideo]?.play().catch(() => {});
+        }
+      };
+      reducedMotion.addEventListener("change", syncHeroMotion);
+      syncHeroMotion();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+title = "Kaydaptation Gitleaks configuration"
+
+[allowlist]
+description = "Allow only known placeholder values in environment templates."
+regexes = [
+  '''CHANGE_ME''',
+  '''replace_me(?:_if_used)?''',
+  '''replace_with_at_least_32_random_characters'''
+]
