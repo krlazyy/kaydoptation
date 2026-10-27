@@ -12,6 +12,8 @@ Then open <http://localhost:4173>. The React development server proxies `/api` r
 
 ## Deploy the preview to Vercel
 
+Live preview: [kaydoptation.vercel.app](https://kaydoptation.vercel.app/).
+
 This repository is configured for Vercel: its Vite build publishes `dist/`, and the three demo API endpoints run as Node.js Functions under `/api/v1/pets`. Import the repository into Vercel or run `npx vercel` from the project root. Use Node.js 22.x; no production secrets or environment variables are needed for this demo.
 
 This makes the **sample preview** deployable, not the full adoption platform described in the feature brief. The API uses in-memory fixture data and per-instance rate limits. Authentication, database persistence, tenant isolation, applications, document storage, scheduling, payments, and shelter administration are not implemented. Do not collect adopter information or use this deployment for real adoption decisions or transactions.
