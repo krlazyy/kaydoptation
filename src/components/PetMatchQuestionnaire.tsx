@@ -390,7 +390,7 @@ export function PetMatchQuestionnaire() {
       });
       setShowResults(true);
     } catch {
-      setShowResults(true);
+      // Keep the last question visible so the adopter can see the error and retry.
     }
   };
 
@@ -484,6 +484,12 @@ export function PetMatchQuestionnaire() {
                 ))}
               </div>
             </fieldset>
+            {error && (
+              <p className="quiz-submit-error" role="alert">
+                We couldn’t load your matches. Your answers are saved here; try
+                again in a moment. ({error})
+              </p>
+            )}
             <div className="quiz-navigation">
               <button
                 className="quiz-back"
@@ -500,7 +506,9 @@ export function PetMatchQuestionnaire() {
                 {loading
                   ? "Finding your matches…"
                   : step === questions.length - 1
-                    ? "See my matches"
+                    ? error
+                      ? "Try again"
+                      : "See my matches"
                     : "Keep going"}
                 {!loading && (
                   <span>{step === questions.length - 1 ? "✦" : "→"}</span>

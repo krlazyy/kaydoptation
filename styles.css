@@ -1295,6 +1295,16 @@ h2 em {
   gap: 12px;
   margin-top: 15px;
 }
+.quiz-submit-error {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid #e9c5bc;
+  border-radius: 10px;
+  background: #fff6f3;
+  color: #8b3e35;
+  font-size: 11px;
+  line-height: 1.5;
+}
 .quiz-back,
 .quiz-retake {
   padding: 9px 0;

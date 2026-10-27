@@ -128,6 +128,9 @@ export function usePetMatch() {
     loading,
     error,
     getMatches,
-    resetMatches: () => setResult(null),
+    resetMatches: () => {
+      setResult(null);
+      setError(null);
+    },
   };
 }
